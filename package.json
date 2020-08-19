@@ -1,0 +1,19 @@
+{
+  "name": "@definejs/emitter",
+  "version": "0.1.5",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "micty",
+  "email": "mictydeng@qq.com",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/definejs/emitter.git"
+  },
+  "dependencies": {
+    "@definejs/object": "^0.1.2",
+    "@definejs/tree": "^0.1.4"
+  }
+}
