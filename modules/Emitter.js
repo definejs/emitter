@@ -30,7 +30,7 @@ class Emitter {
     * @param {function} fn 事件处理函数。 
         在处理函数内部， this 指向构造器参数 context 对象。
     * @example
-        var emitter = new Emitter();
+        let emitter = new Emitter();
         emitter.on('click', function () {});
     */
     on(name, fn) {
@@ -67,6 +67,11 @@ class Emitter {
             list.forEach(function (item, index) {
                 let keys = names.concat(item.keys);
 
+                //过滤掉空串，这个很重要，在模板填充里用到。
+                keys = keys.filter(function (key) {
+                    return !!key;
+                });
+
                 let node = tree.get(keys) || {
                     'list': [],         //本节点的回调列表。
                     'count': 0,         //本节点触发的次数计数。
@@ -92,7 +97,12 @@ class Emitter {
 
         fn = args[index]; //回调函数
 
-        let names = args.slice(0, index); //前面的都当作是名称
+        let names = args.slice(0, index); //前面的都当作是名称。
+
+        //过滤掉空串，这个很重要，在模板填充里用到。
+        names = names.filter(function (key) {
+            return !!key;
+        });
 
         let node = tree.get(names) || {
             'list': [],         //本节点的回调列表。
@@ -118,9 +128,9 @@ class Emitter {
         如果不指定，则移除 name 所关联的所有事件。
     */
     off(name, fn) {
-        var meta = mapper.get(this);
-        var tree = meta.tree;
-        var args = Array.from(arguments);
+        let meta = mapper.get(this);
+        let tree = meta.tree;
+        let args = Array.from(arguments);
 
         //未指定事件名，则移除所有的事件。
         if (args.length == 0) {
@@ -130,18 +140,24 @@ class Emitter {
 
         //多名称情况: off(name0, name1, ..., nameN, {});
         //先尝试找到 {} 所在的位置。
-        var index = args.findIndex(function (item, index) {
+        let index = args.findIndex(function (item, index) {
             return typeof item == 'object';
         });
 
         if (index >= 0) {
-            var obj = args[index];              //{} 对象。
-            var names = args.slice(0, index);   //前缀部分 [name0, name1, ..., nameN]。
-            var list = $Object.flat(obj);       //{} 对象部分扁平化。
+            let obj = args[index];              //{} 对象。
+            let names = args.slice(0, index);   //前缀部分 [name0, name1, ..., nameN]。
+            let list = $Object.flat(obj);       //{} 对象部分扁平化。
 
             list.forEach(function (item, index) {
-                var keys = names.concat(item.keys); //完整路径。
-                var node = tree.get(keys);          //该路径对应的节点。
+                let keys = names.concat(item.keys); //完整路径。
+
+                //过滤掉空串，这个很重要，在模板填充里用到。
+                keys = keys.filter(function (key) {
+                    return !!key;
+                });
+                
+                let node = tree.get(keys);          //该路径对应的节点。
 
                 //不存在该路径对应的节点。
                 if (!node) {
@@ -149,12 +165,12 @@ class Emitter {
                 }
 
                 //存在该路径对应的节点，但事件列表为空。
-                var list = node.list;
+                let list = node.list;
                 if (!list || !list.length) {
                     return;
                 }
 
-                var fn = item.value;
+                let fn = item.value;
                 node.list = list.filter(function (item) {
                     return item !== fn;
                 });
@@ -165,7 +181,7 @@ class Emitter {
 
         //重载 off(name0, name1, ..., nameN, fn) 的情况。
         //先尝试找到回调函数所在的位置。
-        var index = args.findIndex(function (item, index) {
+        index = args.findIndex(function (item, index) {
             return typeof item == 'function';
         });
 
@@ -176,8 +192,14 @@ class Emitter {
 
         fn = args[index]; //回调函数。
 
-        var names = args.slice(0, index); //前面的都当作是名称。
-        var node = tree.get(names);
+        let names = args.slice(0, index); //前面的都当作是名称。
+
+        //过滤掉空串，这个很重要，在模板填充里用到。
+        names = names.filter(function (key) {
+            return !!key;
+        });
+
+        let node = tree.get(names);
 
         //不存在该路径对应的节点。
         if (!node) {
@@ -185,7 +207,7 @@ class Emitter {
         }
 
         //存在该路径对应的节点，但事件列表为空。
-        var list = node.list;
+        let list = node.list;
         if (!list || !list.length) {
             return;
         }
@@ -206,7 +228,7 @@ class Emitter {
     * 触发指定名称的事件，并可向事件处理函数传递一些参数。
     * @return {Array} 返回所有事件处理函数的返回值所组成的一个数组。
     * @example
-        var emitter = new Emitter();
+        let emitter = new Emitter();
         emitter.on('click', 'name', function (a, b) {
             console.log(a, b);
         });
