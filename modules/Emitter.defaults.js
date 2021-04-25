@@ -5,7 +5,7 @@
 */
 module.exports = {
     /**
-    * 生成组件时的 id 前缀。
+    * 生成实例时的 id 前缀。
     * 建议保留现状。
     */
     idPrefix: 'definejs-Emitter',
