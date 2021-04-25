@@ -1,9 +1,9 @@
 
 const $Object = require('@definejs/object');
 const Tree = require('@definejs/tree');
-const IDMaker = require('@definejs/id-maker');
 
 const mapper = new Map();
+let idCounter = 0;
 
 class Emitter {
     /**
@@ -14,10 +14,11 @@ class Emitter {
     constructor(context, config) {
         config = $Object.deepAssign({}, exports.defaults, config);
 
-        let maker = new IDMaker(config.idPrefix);
+
+        let id = `${config.idPrefix}-${idCounter++}`;
 
         let meta = {
-            'id': maker.next(),
+            'id': id,
             'context': context,
             'tree': new Tree(),
         };
@@ -31,7 +32,6 @@ class Emitter {
 
     // /**
     // * 当前实例的 id。
-    // * 也是最外层的 DOM 节点的 id。
     // */
     // id = ''
 
