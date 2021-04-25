@@ -1,6 +1,6 @@
 {
   "name": "@definejs/emitter",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {},
@@ -13,6 +13,7 @@
     "url": "https://github.com/definejs/emitter.git"
   },
   "dependencies": {
+    "@definejs/id-maker": "^1.0.1",
     "@definejs/object": "^1.1.0",
     "@definejs/tree": "^1.0.0"
   }

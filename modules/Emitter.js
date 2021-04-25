@@ -1,6 +1,7 @@
 
 const $Object = require('@definejs/object');
 const Tree = require('@definejs/tree');
+const IDMaker = require('@definejs/id-maker');
 
 const mapper = new Map();
 
@@ -10,14 +11,29 @@ class Emitter {
     * @param {Object} [context=null] 事件处理函数中的 this 上下文对象。
     *   如果不指定，则默认为 null。
     */
-    constructor(context) {
+    constructor(context, config) {
+        config = $Object.deepAssign({}, exports.defaults, config);
+
+        let maker = new IDMaker(config.idPrefix);
+
         let meta = {
+            'id': maker.next(),
             'context': context,
             'tree': new Tree(),
         };
 
         mapper.set(this, meta);
+
+        Object.assign(this, {
+            'id': meta.id,
+        });
     }
+
+    // /**
+    // * 当前实例的 id。
+    // * 也是最外层的 DOM 节点的 id。
+    // */
+    // id = ''
 
     /**
     * 绑定指定名称的事件处理函数。
@@ -313,4 +329,6 @@ class Emitter {
 /**
 * 
 */
-module.exports = Emitter;
+
+Emitter.defaults = require('./Emitter.defaults');
+module.exports = exports = Emitter;
