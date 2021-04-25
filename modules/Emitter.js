@@ -11,11 +11,9 @@ class Emitter {
     * @param {Object} [context=null] 事件处理函数中的 this 上下文对象。
     *   如果不指定，则默认为 null。
     */
-    constructor(context, config) {
-        config = $Object.deepAssign({}, exports.defaults, config);
+    constructor(context) {
 
-
-        let id = `${config.idPrefix}-${idCounter++}`;
+        let id = `definejs-Emitter-${idCounter++}`;
 
         let meta = {
             'id': id,
@@ -330,5 +328,4 @@ class Emitter {
 * 
 */
 
-Emitter.defaults = require('./Emitter.defaults');
-module.exports = exports = Emitter;
+module.exports = Emitter;
